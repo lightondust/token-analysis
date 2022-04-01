@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/.idea/
+/token_analysis/data/
+/token_analysis/config/coinmarketcap.json
