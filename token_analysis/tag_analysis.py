@@ -70,8 +70,8 @@ def plot_coins(app_data: AppData):
     data_df = app_data.data_df
     tag_coins = app_data.tag_coins
 
-    highlight_tags = st.multiselect('highlight tags:', tag_coins.keys())
-    log_scale = st.checkbox('log scale', value=True)
+    highlight_tags = st.multiselect('highlight coins by tag:', tag_coins.keys())
+    log_scale = st.checkbox('display in log scale', value=True)
     y_selected = 'market_cap'
 
     df_show = data_df
@@ -103,7 +103,7 @@ def plot_coins(app_data: AppData):
     show_fig(fig, fig_el)
 
 
-def tag_graph(app_data:AppData):
+def tag_graph(app_data):
     import networkx as nx
     import matplotlib.pyplot as plt
 
@@ -171,11 +171,10 @@ def tag_graph(app_data:AppData):
 
 
 def tag2vec(app_data: AppData):
-    from gensim.models import Word2Vec
 
     tag_coins = app_data.tag_coins
+    model = app_data.tag2vec_model
 
-    model = Word2Vec.load('./data/models/node2vec.model')
     tag_select = st.selectbox('tag', list(tag_coins.keys()))
-    tag_sim = model.wv.most_similar(tag_select)
+    tag_sim = model.wv.most_similar(tag_select, topn=100)
     st.dataframe(pd.DataFrame(tag_sim))
