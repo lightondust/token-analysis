@@ -1,5 +1,5 @@
 import streamlit as st
-from tag_analysis import plot_tag_stats, plot_tag_members, plot_coins, tag_graph, tag2vec
+from tag_analysis import plot_tag_stats, plot_tag_members, plot_coins, tag_graph, tag2vec, tag_sim
 from app_data import get_app_data, pre_process
 import logging
 
@@ -21,6 +21,7 @@ page_function = {
     'token marketcap': plot_coins,
     'tokens in tag': plot_tag_members,
     'tag statistice': plot_tag_stats,
+    'tag similarity': tag_sim,
     'tag graph': tag_graph,
     'tag2vec': tag2vec
 }

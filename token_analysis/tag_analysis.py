@@ -3,16 +3,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from app_data import AppData
-
-
-def show_fig(fig, fig_el=None):
-    fig.update_layout(barmode='stack', xaxis={'categoryorder':'total descending'})
-    fig.update_layout(width=1200, height=800)
-    if fig_el:
-        fig_gen = fig_el.plotly_chart
-    else:
-        fig_gen = st.plotly_chart
-    fig_gen(fig, width=1200, height=900)
+from app_util import show_fig
 
 
 def plot_tag_stats(app_data: AppData):
@@ -103,14 +94,9 @@ def plot_coins(app_data: AppData):
     show_fig(fig, fig_el)
 
 
-def tag_graph(app_data):
-    import networkx as nx
-    import matplotlib.pyplot as plt
-
+def get_tag_sim_df(app_data):
     tag_coins = app_data.tag_coins
-
-    tag_list_all = list(tag_coins.keys())
-    tag_list = tag_list_all
+    tag_list = list(tag_coins.keys())
 
     tag_tag_sim = []
     for tag in tag_list:
@@ -122,6 +108,27 @@ def tag_graph(app_data):
                 if n_int:
                     tag_tag_sim.append([tag, tag_tar, n_int / np.sqrt(len(coins) * len(coins_tar))])
     tag_tag_sim_df = pd.DataFrame(tag_tag_sim, columns=['tag_src', 'tag_tar', 'weight'])
+    return tag_tag_sim_df, tag_tag_sim
+
+
+def tag_sim(app_data):
+    tag_sim_df, tag_sim_list = get_tag_sim_df(app_data)
+    tag_coins = app_data.tag_coins
+    tag_list = list(tag_coins.keys())
+    tag_select = st.selectbox('target tags:', tag_list)
+    df_show = tag_sim_df[tag_sim_df.tag_src == tag_select]
+    df_show = df_show.sort_values(by='weight')[::-1].reset_index().drop('index', axis=1)
+    st.table(df_show)
+
+
+def tag_graph(app_data):
+    import networkx as nx
+    import matplotlib.pyplot as plt
+
+    tag_coins = app_data.tag_coins
+    tag_list_all = list(tag_coins.keys())
+    tag_list = tag_list_all
+    tag_tag_sim_df, tag_tag_sim = get_tag_sim_df(app_data)
 
     ecosystem_tags = [t for t in list(tag_coins.keys()) if 'ecosystem' in t]
     fund_tags = [t for t in list(tag_coins.keys()) if 'portfolio' in t or 'capital' in t or 'group' in t]
@@ -140,7 +147,7 @@ def tag_graph(app_data):
         tag_tag_sim_df_single = tag_tag_sim_df_single.reset_index()
         st.dataframe(tag_tag_sim_df_single)
 
-    st.markdown('### tag graph sim')
+    st.markdown('### graph links')
     tag_tag_sim_df_show = tag_tag_sim_df[tag_tag_sim_df.tag_src.isin(tags_filter)
                                          & tag_tag_sim_df.tag_tar.isin(tags_filter)]
     tag_tag_sim_df_show = tag_tag_sim_df_show.sort_values(by='weight')[::-1]
@@ -177,4 +184,7 @@ def tag2vec(app_data: AppData):
 
     tag_select = st.selectbox('tag', list(tag_coins.keys()))
     tag_sim = model.wv.most_similar(tag_select, topn=100)
-    st.dataframe(pd.DataFrame(tag_sim))
+    tag_sim = [list(t) for t in tag_sim]
+    for tag_info in tag_sim:
+        tag_info.append(len(tag_coins[tag_info[0]]))
+    st.table(pd.DataFrame(tag_sim))
