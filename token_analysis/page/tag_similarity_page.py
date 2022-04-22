@@ -1,8 +1,6 @@
 from page.base_page import BasePage
 import streamlit as st
 
-from app_data import get_tag_sim_df
-
 
 class TagSimilarityPage(BasePage):
     def __init__(self, app_data):
@@ -14,7 +12,7 @@ class TagSimilarityPage(BasePage):
         self.tag_sim()
 
     def tag_sim(self):
-        tag_sim_df, tag_sim_list = get_tag_sim_df(self.app_data)
+        tag_sim_df, tag_sim_list = self.app_data.tag_tag_sim_df, self.app_data.tag_tag_sim
         tag_coins = self.app_data.tag_coins
         tag_list = list(tag_coins.keys())
         tag_select = st.selectbox('target tags:', tag_list)

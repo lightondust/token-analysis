@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 from page.base_page import BasePage
 import streamlit as st
 
-from app_data import get_tag_sim_df
-
 
 class TagGraphPage(BasePage):
     def __init__(self, app_data):
@@ -21,7 +19,7 @@ class TagGraphPage(BasePage):
         tag_coins = self.app_data.tag_coins
         tag_list_all = list(tag_coins.keys())
         tag_list = tag_list_all
-        tag_tag_sim_df, tag_tag_sim = get_tag_sim_df(self.app_data)
+        tag_tag_sim_df, tag_tag_sim = self.app_data.tag_tag_sim_df, self.app_data.tag_tag_sim
 
         ecosystem_tags = [t for t in list(tag_coins.keys()) if 'ecosystem' in t]
         fund_tags = [t for t in list(tag_coins.keys()) if 'portfolio' in t or 'capital' in t or 'group' in t]
