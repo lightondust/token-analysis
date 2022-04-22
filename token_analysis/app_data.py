@@ -2,6 +2,8 @@ import glob
 import logging
 import os
 import json
+
+import numpy as np
 import pandas as pd
 from gensim.models import Word2Vec
 
@@ -171,3 +173,20 @@ def get_app_data():
     # app_data.get_data()
     # return app_data
     return AppData()
+
+
+def get_tag_sim_df(app_data):
+    tag_coins = app_data.tag_coins
+    tag_list = list(tag_coins.keys())
+
+    tag_tag_sim = []
+    for tag in tag_list:
+        coins = tag_coins[tag]
+        for tag_tar in tag_list:
+            if tag_tar != tag:
+                coins_tar = tag_coins[tag_tar]
+                n_int = len(set(coins).intersection(set(coins_tar)))
+                if n_int:
+                    tag_tag_sim.append([tag, tag_tar, n_int / np.sqrt(len(coins) * len(coins_tar))])
+    tag_tag_sim_df = pd.DataFrame(tag_tag_sim, columns=['tag_src', 'tag_tar', 'weight'])
+    return tag_tag_sim_df, tag_tag_sim
