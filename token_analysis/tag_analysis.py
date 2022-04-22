@@ -62,17 +62,20 @@ def plot_coins(app_data: AppData):
     tag_coins = app_data.tag_coins
 
     highlight_tags = st.multiselect('highlight coins by tag:', tag_coins.keys())
-    log_scale = st.checkbox('display in log scale', value=True)
     y_selected = 'market_cap'
 
     df_show = data_df
-    df_show = df_show[df_show[y_selected] > 1]
+    if y_selected == 'market_cap':
+        df_show = df_show[df_show[y_selected] > 1]
+        st.markdown('market cap of all data available tokens :{:.3} trillion dollar'.format(df_show[y_selected].sum() / 10.0 ** 12))
     df_show = df_show.sort_values(by=y_selected)[::-1]
 
     top_n = st.slider('top n coins:', 0, df_show.shape[0], 300, 1)
     top_n = int(top_n)
     df_show = df_show[:top_n]
 
+
+    log_scale = st.checkbox('display in log scale', value=True)
     fig_el = st.empty()
 
     def highlight_coin(tags):
@@ -168,7 +171,6 @@ def tag_graph(app_data):
         for sim in tag_tag_sim:
             g.add_edge(sim[0], sim[1], weight=sim[2])
 
-
         g_show = g.subgraph(tags_filter)
 
         fig = plt.figure(1, figsize=(30, 30))
@@ -187,4 +189,7 @@ def tag2vec(app_data: AppData):
     tag_sim = [list(t) for t in tag_sim]
     for tag_info in tag_sim:
         tag_info.append(len(tag_coins[tag_info[0]]))
-    st.table(pd.DataFrame(tag_sim))
+    tag_sim_df = pd.DataFrame(tag_sim, columns=['tag', 'similarity', 'coins_in_tag'])
+    tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.coins_in_tag)
+    tag_sim_df = tag_sim_df.sort_values('score')[::-1]
+    st.dataframe(tag_sim_df, height=500)
