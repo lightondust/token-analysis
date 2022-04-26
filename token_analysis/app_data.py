@@ -36,12 +36,13 @@ class AppData(object):
         self.tag2vec_model = None
         self.tag_tag_sim_df = None
         self.tag_tag_sim = None
-        self.token_token_df = None
+        self.token_token_sim_df = None
 
         if auto_process:
             self.get_data_files()
             self.get_data()
             self.get_tag2vec_model()
+            self.get_token_token_sim_df()
 
     def get_tag2vec_model(self):
         self.tag2vec_model = Word2Vec.load('./data/models/node2vec.model')
@@ -96,7 +97,7 @@ class AppData(object):
 
         return df
 
-    def get_token_token_df(self):
+    def get_token_token_sim_df(self):
         token_tags = self.token_tags
         token_list = list(token_tags.keys())
 
@@ -124,7 +125,7 @@ class AppData(object):
                         if n_int:
                             token_token_sim.append([token, token_tar, n_int / np.sqrt(len(tags) * len(tags_tar))])
 
-        self.token_token_df = pd.DataFrame(token_token_sim, columns=['token_src', 'token_tar', 'sim'])
+        self.token_token_sim_df = pd.DataFrame(token_token_sim, columns=['token_src', 'token_tar', 'sim'])
 
     @staticmethod
     def get_tag_type(tag_name):

@@ -1,6 +1,7 @@
 import streamlit as st
 from page.tag2vec_page import Tag2VecPage
 from page.tag_graph_page import TagGraphPage
+from page.token_similarity_page import TokenSimilarityPage
 from page.tag_similarity_page import TagSimilarityPage
 from page.tag_statistics_page import TagStatisticsPage
 from page.tag_members_page import TagMembersPage
@@ -25,6 +26,7 @@ app_data = _get_app_data()
 
 page_class = {
     'Token marketcap': TokenMarketCapPage,
+    'Token similarity': TokenSimilarityPage,
     'Tag members': TagMembersPage,
     'Tag similarity': TagSimilarityPage,
     'Tag2vec': Tag2VecPage,
