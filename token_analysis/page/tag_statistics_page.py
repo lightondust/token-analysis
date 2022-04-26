@@ -16,18 +16,18 @@ class TagStatisticsPage(BasePage):
         self.plot_tag_stats()
 
     def plot_tag_stats(self):
-        tag_coins = self.app_data.tag_coins
-        coin_tags = self.app_data.coin_tags
+        tag_tokens = self.app_data.tag_tokens
+        token_tags = self.app_data.token_tags
         tag_info_df = self.app_data.tag_info_df
 
         graph_type = st.selectbox('graph type', ['bar', 'scatter'])
         log_scale = st.checkbox('log scale', value=True)
         y_selected = st.selectbox('y:', ['count', 'market_cap'])
         tag_type = st.selectbox('tag group:', ['all', 'ecosystem'])
-        highlight_tags = st.multiselect('highlight tags:', tag_coins.keys())
-        high_light_tags_of_coins = st.multiselect('highlight tags:', coin_tags.keys())
-        for c in high_light_tags_of_coins:
-            highlight_tags += coin_tags[c]
+        highlight_tags = st.multiselect('highlight tags:', tag_tokens.keys())
+        high_light_tags_of_tokens = st.multiselect('highlight tags:', token_tags.keys())
+        for c in high_light_tags_of_tokens:
+            highlight_tags += token_tags[c]
         highlight_tags = list(set(highlight_tags))
 
         df_show = tag_info_df.copy().sort_values(by=y_selected)[::-1]

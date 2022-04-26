@@ -16,13 +16,13 @@ class TagGraphPage(BasePage):
         self.tag_graph()
 
     def tag_graph(self):
-        tag_coins = self.app_data.tag_coins
-        tag_list_all = list(tag_coins.keys())
+        tag_tokens = self.app_data.tag_tokens
+        tag_list_all = list(tag_tokens.keys())
         tag_list = tag_list_all
         tag_tag_sim_df, tag_tag_sim = self.app_data.tag_tag_sim_df, self.app_data.tag_tag_sim
 
-        ecosystem_tags = [t for t in list(tag_coins.keys()) if 'ecosystem' in t]
-        fund_tags = [t for t in list(tag_coins.keys()) if 'portfolio' in t or 'capital' in t or 'group' in t]
+        ecosystem_tags = [t for t in list(tag_tokens.keys()) if 'ecosystem' in t]
+        fund_tags = [t for t in list(tag_tokens.keys()) if 'portfolio' in t or 'capital' in t or 'group' in t]
         graph_type = st.selectbox('graph type:', ['ecosystem', 'fund', 'tag adj'])
 
         if graph_type == 'ecosystem':

@@ -7,7 +7,7 @@ import streamlit as st
 
 
 class Tag2VecPage(BasePage):
-    def __init__(self, app_data):
+    def __init__(self, app_data: AppData):
         super().__init__(app_data)
         self.title = 'Template Page'
         st.title(self.title)
@@ -16,15 +16,16 @@ class Tag2VecPage(BasePage):
         self.tag2vec()
 
     def tag2vec(self):
-        tag_coins = self.app_data.tag_coins
+        tag_tokens = self.app_data.tag_tokens
         model = self.app_data.tag2vec_model
 
-        tag_select = st.selectbox('tag', list(tag_coins.keys()))
+        tag_select = st.selectbox('tag', list(tag_tokens.keys()))
         tag_sim = model.wv.most_similar(tag_select, topn=100)
         tag_sim = [list(t) for t in tag_sim]
         for tag_info in tag_sim:
-            tag_info.append(len(tag_coins[tag_info[0]]))
-        tag_sim_df = pd.DataFrame(tag_sim, columns=['tag', 'similarity', 'coins_in_tag'])
-        tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.coins_in_tag)
+            tks = tag_tokens.get(tag_info[0], [])
+            tag_info.append(len(tks))
+        tag_sim_df = pd.DataFrame(tag_sim, columns=['tag', 'similarity', 'tokens_in_tag'])
+        tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.tokens_in_tag)
         tag_sim_df = tag_sim_df.sort_values('score')[::-1]
         st.dataframe(tag_sim_df, height=500)

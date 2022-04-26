@@ -13,8 +13,8 @@ class TagSimilarityPage(BasePage):
 
     def tag_sim(self):
         tag_sim_df, tag_sim_list = self.app_data.tag_tag_sim_df, self.app_data.tag_tag_sim
-        tag_coins = self.app_data.tag_coins
-        tag_list = list(tag_coins.keys())
+        tag_tokens = self.app_data.tag_tokens
+        tag_list = list(tag_tokens.keys())
         tag_select = st.selectbox('target tags:', tag_list)
         df_show = tag_sim_df[tag_sim_df.tag_src == tag_select]
         df_show = df_show.sort_values(by='weight')[::-1].reset_index().drop('index', axis=1)

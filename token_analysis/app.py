@@ -42,4 +42,3 @@ st.sidebar.markdown('- based on data {} from [coinmarket]({}) \n'.format(
     app_data.data_path.split('/')[-1].split('.')[0].split('_')[1],
     'https://coinmarketcap.com/') + '- [source code]({})'.format(
     'https://github.com/lightondust/token-analysis'))
-

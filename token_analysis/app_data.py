@@ -28,14 +28,15 @@ class AppData(object):
         self.data_dir = './data/coinmarket/'
         self.data_files = []
         self.data_path = None
-        self.tag_coins = {}
-        self.coin_tags = {}
+        self.tag_tokens = {}
+        self.token_tags = {}
         self.data = {}
         self.data_df = None
         self.tag_info_df = None
         self.tag2vec_model = None
         self.tag_tag_sim_df = None
         self.tag_tag_sim = None
+        self.token_token_df = None
 
         if auto_process:
             self.get_data_files()
@@ -54,7 +55,7 @@ class AppData(object):
     def get_data(self):
         self.data_path = self.data_files[0]
         self.data_df, self.data = self.read_data()
-        self.tag_coins, self.coin_tags = self.get_tag_maps()
+        self.tag_tokens, self.token_tags = self.get_tag_maps()
         self.tag_info_df = self.get_tag_info_df()
         self.get_tag_sim_df()
 
@@ -73,18 +74,18 @@ class AppData(object):
             dis = '{}_{}'.format(d['id'], d['name'])
             c_t[dis] = d['tags']
             for tag in d['tags']:
-                coins = t_c.get(tag)
-                if coins:
-                    coins.append(dis)
+                tokens = t_c.get(tag)
+                if tokens:
+                    tokens.append(dis)
                 else:
                     t_c[tag] = [dis]
         return t_c, c_t
 
     def get_tag_info_df(self):
-        tag_info = {k: [len(self.tag_coins[k])] for k in self.tag_coins}
+        tag_info = {k: [len(self.tag_tokens[k])] for k in self.tag_tokens}
 
-        for tag in self.tag_coins.keys():
-            c_s = self.tag_coins[tag]
+        for tag in self.tag_tokens.keys():
+            c_s = self.tag_tokens[tag]
             c_s_id = [int(c.split('_')[0]) for c in c_s]
             v = self.data_df[self.data_df.id.isin(c_s_id)].market_cap.sum() / 10**8
             tag_info[tag].append(v)
@@ -95,6 +96,36 @@ class AppData(object):
 
         return df
 
+    def get_token_token_df(self):
+        token_tags = self.token_tags
+        token_list = list(token_tags.keys())
+
+        tag_isolate = set([k for k, v in self.tag_tokens.items() if len(v) == 1])
+        token_isolate = []
+        for token in token_list:
+            tags = token_tags[token]
+            if len(tags) == 0:
+                token_isolate.append(token)
+            elif len(tags) == 1:
+                if tags[0] in tag_isolate:
+                    token_isolate.append(token)
+        token_isolate = set(token_isolate)
+
+        token_list = [c for c in token_list if c not in token_isolate]
+
+        token_token_sim = []
+        for token in token_list:
+            tags = token_tags[token]
+            if tags:
+                for token_tar in token_list:
+                    if token_tar != token:
+                        tags_tar = token_tags[token_tar]
+                        n_int = len(set(tags).intersection(set(tags_tar)))
+                        if n_int:
+                            token_token_sim.append([token, token_tar, n_int / np.sqrt(len(tags) * len(tags_tar))])
+
+        self.token_token_df = pd.DataFrame(token_token_sim, columns=['token_src', 'token_tar', 'sim'])
+
     @staticmethod
     def get_tag_type(tag_name):
         if 'ecosystem' in tag_name:
@@ -103,18 +134,18 @@ class AppData(object):
             return 'default'
 
     def get_tag_sim_df(self):
-        tag_coins = self.tag_coins
-        tag_list = list(tag_coins.keys())
+        tag_tokens = self.tag_tokens
+        tag_list = list(tag_tokens.keys())
 
         tag_tag_sim = []
         for tag in tag_list:
-            coins = tag_coins[tag]
+            tokens = tag_tokens[tag]
             for tag_tar in tag_list:
                 if tag_tar != tag:
-                    coins_tar = tag_coins[tag_tar]
-                    n_int = len(set(coins).intersection(set(coins_tar)))
+                    tokens_tar = tag_tokens[tag_tar]
+                    n_int = len(set(tokens).intersection(set(tokens_tar)))
                     if n_int:
-                        tag_tag_sim.append([tag, tag_tar, n_int / np.sqrt(len(coins) * len(coins_tar))])
+                        tag_tag_sim.append([tag, tag_tar, n_int / np.sqrt(len(tokens) * len(tokens_tar))])
         tag_tag_sim_df = pd.DataFrame(tag_tag_sim, columns=['tag_src', 'tag_tar', 'weight'])
         self.tag_tag_sim_df = tag_tag_sim_df
         self.tag_tag_sim = tag_tag_sim

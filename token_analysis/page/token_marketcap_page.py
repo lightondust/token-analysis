@@ -13,13 +13,13 @@ class TokenMarketCapPage(BasePage):
         st.title(self.title)
 
     def run(self):
-        self.plot_coins()
+        self.plot_tokens()
 
-    def plot_coins(self):
+    def plot_tokens(self):
         data_df = self.app_data.data_df
-        tag_coins = self.app_data.tag_coins
+        tag_tokens = self.app_data.tag_tokens
 
-        highlight_tags = st.multiselect('highlight coins by tag:', tag_coins.keys())
+        highlight_tags = st.multiselect('highlight tokens by tag:', tag_tokens.keys())
         y_selected = 'market_cap'
 
         df_show = data_df
@@ -28,19 +28,19 @@ class TokenMarketCapPage(BasePage):
             st.markdown('market cap of all data available tokens :{:.3} trillion dollar'.format(df_show[y_selected].sum() / 10.0 ** 12))
         df_show = df_show.sort_values(by=y_selected)[::-1]
 
-        top_n = st.slider('top n coins:', 0, df_show.shape[0], 300, 1)
+        top_n = st.slider('top n tokens:', 0, df_show.shape[0], 300, 1)
         top_n = int(top_n)
         df_show = df_show[:top_n]
 
         log_scale = st.checkbox('display in log scale', value=True)
         fig_el = st.empty()
 
-        def highlight_coin(tags):
+        def highlight_token(tags):
             if set(tags).intersection(set(highlight_tags)):
                 return 'red'
             else:
                 return 'blue'
-        df_show['color'] = df_show.tags.apply(highlight_coin)
+        df_show['color'] = df_show.tags.apply(highlight_token)
 
         df_filtered = df_show[df_show.color == 'red']
         for i, v in df_filtered.iterrows():
