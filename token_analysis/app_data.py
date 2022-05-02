@@ -30,10 +30,13 @@ class AppData(object):
         self.data_path = None
         self.tag_tokens = {}
         self.token_tags = {}
-        self.data = {}
+        self.data = []
+        self.token_info = {}
         self.data_df = None
         self.tag_info_df = None
         self.tag2vec_model = None
+        self.token2vec_model = None
+        self.all2vec_model = None
         self.tag_tag_sim_df = None
         self.tag_tag_sim = None
         self.token_token_sim_df = None
@@ -42,10 +45,18 @@ class AppData(object):
             self.get_data_files()
             self.get_data()
             self.get_tag2vec_model()
+            self.get_all2vec_model()
+            self.get_token2vec_model()
             self.get_token_token_sim_df()
 
+    def get_all2vec_model(self):
+        self.all2vec_model = Word2Vec.load('./data/models/all2vec.model')
+
+    def get_token2vec_model(self):
+        self.token2vec_model = Word2Vec.load('./data/models/token2vec.model')
+
     def get_tag2vec_model(self):
-        self.tag2vec_model = Word2Vec.load('./data/models/node2vec.model')
+        self.tag2vec_model = Word2Vec.load('./data/models/tag2vec.model')
 
     def get_data_files(self):
         d_files = glob.glob(os.path.join(self.data_dir, '*.json'))
@@ -55,17 +66,18 @@ class AppData(object):
 
     def get_data(self):
         self.data_path = self.data_files[0]
-        self.data_df, self.data = self.read_data()
+        self.data_df, self.data, self.token_info = self.read_data()
         self.tag_tokens, self.token_tags = self.get_tag_maps()
         self.tag_info_df = self.get_tag_info_df()
         self.get_tag_sim_df()
 
     def read_data(self):
         d = load_json(self.data_path)
+        info = {t['id']: t for t in d['data']}
         d_df = pd.DataFrame(d['data'])
         d_df['market_cap'] = d_df.quote.apply(lambda d: d['USD']['market_cap'])
         d_df['diluted_market_cap'] = d_df.quote.apply(lambda d: d['USD']['fully_diluted_market_cap'])
-        return d_df, d
+        return d_df, d, info
 
     def get_tag_maps(self):
         d = self.data

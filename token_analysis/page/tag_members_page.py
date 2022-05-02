@@ -3,6 +3,7 @@ from plotly import express as px
 from app_util import show_fig
 from page.base_page import BasePage
 import streamlit as st
+import pandas as pd
 
 
 class TagMembersPage(BasePage):
@@ -27,3 +28,5 @@ class TagMembersPage(BasePage):
         df_show = data_df[data_df.id.isin(c_s_id)]
         fig = px.bar(df_show, y=y_selected, x='name', log_y=log_scale, range_y=[0.1, 1.1 * data_df[y_selected].max()])
         show_fig(fig)
+        st.markdown('{} tokens'.format(df_show.shape[0]))
+        st.dataframe(df_show[['name', 'cmc_rank', 'market_cap']], height=500)
