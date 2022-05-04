@@ -1,4 +1,6 @@
 import streamlit as st
+
+from app_url import AppURL
 from page.tag2vec_page import Tag2VecPage
 from page.tag_graph_page import TagGraphPage
 from page.token_similarity_page import TokenSimilarityPage
@@ -25,6 +27,7 @@ def _get_app_data():
 
 
 app_data = _get_app_data()
+app_url = AppURL()
 
 page_class = {
     'Token marketcap': TokenMarketCapPage,
@@ -38,11 +41,19 @@ page_class = {
     'Tag graph': TagGraphPage,
     'Template_page': TemplatePage
 }
-page = st.sidebar.radio('page:', page_class.keys())
+page_selected = st.sidebar.radio('page:', list(page_class.keys())+[''], index=len(page_class))
 
-page_obj = page_class[page](app_data)
+if page_selected:
+    app_url.set_query_params('page', page_selected)
+    page = page_selected
+else:
+    if app_url.page:
+        page = app_url.page
+    else:
+        page = 'Token marketcap'
+
+page_obj = page_class[page](app_data=app_data, app_url=app_url)
 page_obj.run()
-
 
 st.sidebar.markdown('- based on data {} from [coinmarket]({}) \n'.format(
     app_data.data_path.split('/')[-1].split('.')[0].split('_')[1],

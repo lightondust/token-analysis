@@ -7,9 +7,9 @@ import streamlit as st
 
 
 class All2VecPage(BasePage):
-    def __init__(self, app_data: AppData):
-        super().__init__(app_data)
-        self.title = 'Template Page'
+    def __init__(self, app_data: AppData, **kwargs):
+        super().__init__(app_data, **kwargs)
+        self.title = 'All2vec Page'
         st.title(self.title)
 
     def run(self):

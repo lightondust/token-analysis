@@ -7,8 +7,8 @@ import streamlit as st
 
 
 class Tag2VecPage(BasePage):
-    def __init__(self, app_data: AppData):
-        super().__init__(app_data)
+    def __init__(self, app_data: AppData, **kwargs):
+        super().__init__(app_data, **kwargs)
         self.title = 'Template Page'
         st.title(self.title)
 

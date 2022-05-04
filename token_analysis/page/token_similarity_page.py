@@ -3,8 +3,8 @@ import streamlit as st
 
 
 class TokenSimilarityPage(BasePage):
-    def __init__(self, app_data):
-        super().__init__(app_data)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.title = 'Token Similarity Page'
         st.title(self.title)
         self.t_t_df = self.app_data.token_token_sim_df

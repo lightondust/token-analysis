@@ -7,8 +7,8 @@ import streamlit as st
 
 
 class TagStatisticsPage(BasePage):
-    def __init__(self, app_data):
-        super().__init__(app_data)
+    def __init__(self, app_data, **kwargs):
+        super().__init__(app_data, **kwargs)
         self.title = 'Tag statistics'
         st.title(self.title)
 
