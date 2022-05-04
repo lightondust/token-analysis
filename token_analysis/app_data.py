@@ -163,6 +163,22 @@ class AppData(object):
         self.tag_tag_sim_df = tag_tag_sim_df
         self.tag_tag_sim = tag_tag_sim
 
+    def token_id_from_identifier(self, token_identifier):
+        return int(token_identifier.split('_')[0])
+
+    def token_url_from_identifier(self, token_identifier):
+        t_id = self.token_id_from_identifier(token_identifier)
+        return 'https://coinmarketcap.com/currencies/{}/'.format(self.token_info[t_id]['slug'])
+
+    def token_url_html_from_identifier(self, token_identifier):
+        return '<a target="_blank" href="{link}">link</a>'.format(link=self.token_url_from_identifier(token_identifier))
+
+    def tags_from_token_identifier(self, token_identifier):
+        return self.token_info[self.token_id_from_identifier(token_identifier)]['tags']
+
+    def tag_url(self, tag):
+        return '<a target="_blank" href="{link}">link</a>'.format(link='https://coinmarketcap.com/ja/view/{}/'.format(tag))
+
 
 def get_app_data():
     return AppData()

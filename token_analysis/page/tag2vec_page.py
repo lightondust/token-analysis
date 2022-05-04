@@ -28,4 +28,6 @@ class Tag2VecPage(BasePage):
         tag_sim_df = pd.DataFrame(tag_sim, columns=['tag', 'similarity', 'tokens_in_tag'])
         tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.tokens_in_tag)
         tag_sim_df = tag_sim_df.sort_values('score')[::-1]
-        st.dataframe(tag_sim_df, height=500)
+        tag_sim_df['link'] = tag_sim_df.tag.apply(self.app_data.tag_url)
+        # st.dataframe(tag_sim_df, height=500)
+        st.write(tag_sim_df.to_html(escape=False, index=False), unsafe_allow_html=True)
