@@ -9,7 +9,7 @@ import streamlit as st
 class Tag2VecPage(BasePage):
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Template Page'
+        self.title = 'Tag2Vec'
         st.title(self.title)
 
     def run(self):
@@ -26,7 +26,7 @@ class Tag2VecPage(BasePage):
             tks = tag_tokens.get(tag_info[0], [])
             tag_info.append(len(tks))
         tag_sim_df = pd.DataFrame(tag_sim, columns=['tag', 'similarity', 'tokens_in_tag'])
-        tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.tokens_in_tag)
+        tag_sim_df['score'] = tag_sim_df.similarity * np.log(tag_sim_df.tokens_in_tag + 1.)
         tag_sim_df = tag_sim_df.sort_values('score')[::-1]
         tag_sim_df['link'] = tag_sim_df.tag.apply(self.app_data.tag_url)
         # st.dataframe(tag_sim_df, height=500)

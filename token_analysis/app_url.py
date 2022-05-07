@@ -14,8 +14,15 @@ class AppURL(object):
     def page(self):
         return self.query_params.get('page', [''])[0]
 
+    @property
+    def token(self):
+        return self.query_params.get('token', [''])[0]
+
+    @property
+    def tag(self):
+        return self.query_params.get('tag', [''])[0]
+
     def set_query_params(self, key, value):
         params = self.query_params
         params[key] = value
         st.experimental_set_query_params(**params)
-

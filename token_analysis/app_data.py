@@ -168,16 +168,21 @@ class AppData(object):
 
     def token_url_from_identifier(self, token_identifier):
         t_id = self.token_id_from_identifier(token_identifier)
-        return 'https://coinmarketcap.com/currencies/{}/'.format(self.token_info[t_id]['slug'])
+        t_info = self.token_info.get(t_id)
+        if t_info:
+            slug = t_info['slug']
+            return 'https://coinmarketcap.com/currencies/{}/'.format(slug)
+        else:
+            return ''
 
     def token_url_html_from_identifier(self, token_identifier):
-        return '<a target="_blank" href="{link}">link</a>'.format(link=self.token_url_from_identifier(token_identifier))
+        return '<a target="_blank" href="{link}">token info</a>'.format(link=self.token_url_from_identifier(token_identifier))
 
     def tags_from_token_identifier(self, token_identifier):
         return self.token_info[self.token_id_from_identifier(token_identifier)]['tags']
 
     def tag_url(self, tag):
-        return '<a target="_blank" href="{link}">link</a>'.format(link='https://coinmarketcap.com/ja/view/{}/'.format(tag))
+        return '<a target="_blank" href="{link}">tag info</a>'.format(link='https://coinmarketcap.com/view/{}/'.format(tag))
 
 
 def get_app_data():

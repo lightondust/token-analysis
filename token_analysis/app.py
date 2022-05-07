@@ -52,6 +52,7 @@ else:
     else:
         page = 'Token marketcap'
 
+# st.write(app_url.query_params)
 page_obj = page_class[page](app_data=app_data, app_url=app_url)
 page_obj.run()
 

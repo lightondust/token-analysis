@@ -26,6 +26,6 @@ class All2VecPage(BasePage):
                 adjs = token_tags.get(term_info[0], [])
             term_info.append(len(adjs))
         term_sim_df = pd.DataFrame(term_sim, columns=['term', 'similarity', 'adjs'])
-        term_sim_df['score'] = term_sim_df.similarity * np.log(term_sim_df.adjs)
+        term_sim_df['score'] = term_sim_df.similarity * np.log(term_sim_df.adjs + 1.)
         tag_sim_df = term_sim_df.sort_values('score')[::-1]
         st.dataframe(tag_sim_df, height=500)
