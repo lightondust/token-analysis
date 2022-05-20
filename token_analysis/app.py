@@ -1,6 +1,7 @@
 import streamlit as st
 
 from app_url import AppURL
+from page.main_page import MainPage
 from page.tag2vec_page import Tag2VecPage
 from page.tag_graph_page import TagGraphPage
 from page.token_similarity_page import TokenSimilarityPage
@@ -22,14 +23,13 @@ st.set_page_config(layout='wide', page_title='token analysis', page_icon='./favi
 
 
 @st.cache(allow_output_mutation=True)
-def _get_app_data():
-    return get_app_data()
+def _get_app_data(page_class):
+    return get_app_data(page_class)
 
 
-app_data = _get_app_data()
-app_url = AppURL()
 
 page_class = {
+    'Main page': MainPage,
     'Token marketcap': TokenMarketCapPage,
     'Token similarity': TokenSimilarityPage,
     'Token2vec': Token2VecPage,
@@ -42,6 +42,9 @@ page_class = {
     'Template_page': TemplatePage
 }
 page_selected = st.sidebar.radio('page:', list(page_class.keys())+[''], index=len(page_class))
+
+app_data = _get_app_data(page_class)
+app_url = AppURL()
 
 if page_selected:
     app_url.set_query_params('page', page_selected)

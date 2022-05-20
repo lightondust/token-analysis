@@ -7,10 +7,11 @@ import streamlit as st
 
 
 class TagGraphPage(BasePage):
+    title = 'Tag Graph'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Tag Graph'
-        st.title(self.title)
+        st.title(TagGraphPage.title)
 
     def run(self):
         self.tag_graph()

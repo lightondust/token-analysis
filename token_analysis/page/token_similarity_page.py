@@ -1,13 +1,13 @@
 from page.base_page import BasePage
 import streamlit as st
-import urllib
 
 
 class TokenSimilarityPage(BasePage):
+    title = 'Token Similarity Page'
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.title = 'Token Similarity Page'
-        st.title(self.title)
+        st.title(TokenSimilarityPage.title)
         self.t_t_df = self.app_data.token_token_sim_df
         self.token_info = self.app_data.token_info
 

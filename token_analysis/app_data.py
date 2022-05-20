@@ -24,7 +24,8 @@ def load_json(path):
 
 class AppData(object):
 
-    def __init__(self, auto_process=True):
+    def __init__(self, page_class, auto_process=True):
+        self.page_class = page_class
         self.data_dir = './data/coinmarket/'
         self.data_files = []
         self.data_path = None
@@ -185,5 +186,5 @@ class AppData(object):
         return '<a target="_blank" href="{link}">tag info</a>'.format(link='https://coinmarketcap.com/view/{}/'.format(tag))
 
 
-def get_app_data():
-    return AppData()
+def get_app_data(page_class):
+    return AppData(page_class)

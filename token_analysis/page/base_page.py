@@ -16,7 +16,7 @@ class BasePage(ABC):
 
     def token_select(self):
         tokens = list(self.app_data.token_tags.keys())
-        token_select = st.selectbox('change token', tokens + [''], index=len(tokens))
+        token_select = st.selectbox('change token', [''] + tokens)
         token = ''
         if token_select:
             token = token_select
@@ -28,7 +28,5 @@ class BasePage(ABC):
         return token
 
     def token_link(self, token):
-        params = self.app_url.query_params
-        params['token'] = token
-        d_qs = urllib.parse.urlencode(params, doseq=True)
-        return '<a target="_blank" href="./?{}">link</a>'.format(d_qs)
+        return '<a target="_blank" href="{}">link</a>'.format(self.app_url.internal_link(token=token))
+

@@ -7,10 +7,11 @@ import streamlit as st
 
 
 class TagStatisticsPage(BasePage):
+    title = 'Tag statistics'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Tag statistics'
-        st.title(self.title)
+        st.title(TagStatisticsPage.title)
 
     def run(self):
         self.plot_tag_stats()

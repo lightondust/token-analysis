@@ -3,10 +3,11 @@ import streamlit as st
 
 
 class TagSimilarityPage(BasePage):
+    title = 'Tag similarity'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Tag similarity'
-        st.title(self.title)
+        st.title(TagSimilarityPage.title)
 
     def run(self):
         self.tag_sim()

@@ -1,4 +1,5 @@
 import streamlit as st
+import urllib
 
 
 class AppURL(object):
@@ -26,3 +27,10 @@ class AppURL(object):
         params = self.query_params
         params[key] = value
         st.experimental_set_query_params(**params)
+
+    def internal_link(self, **params):
+        params_new = self.query_params.copy()
+        for k, v in params.items():
+            params_new[k] = v
+        d_qs = urllib.parse.urlencode(params_new, doseq=True)
+        return './?{}'.format(d_qs)

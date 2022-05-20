@@ -7,10 +7,11 @@ import streamlit as st
 
 
 class Token2VecPage(BasePage):
+    title = 'token2vec'
+
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'token2vec'
-        st.title(self.title)
+        st.title(Token2VecPage.title)
 
     def run(self):
         token_tags = self.app_data.token_tags

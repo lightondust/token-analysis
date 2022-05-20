@@ -1,16 +1,16 @@
 import streamlit as st
 from plotly import express as px
 
-from app_data import AppData
 from app_util import show_fig
 from page.base_page import BasePage
 
 
 class TokenMarketCapPage(BasePage):
+    title = 'Token market cap'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Token market cap'
-        st.title(self.title)
+        st.title(TokenMarketCapPage.title)
 
     def run(self):
         self.plot_tokens()

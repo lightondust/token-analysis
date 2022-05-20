@@ -7,10 +7,11 @@ import streamlit as st
 
 
 class Tag2VecPage(BasePage):
+    title = 'Tag2Vec'
+
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Tag2Vec'
-        st.title(self.title)
+        st.title(Tag2VecPage.title)
 
     def run(self):
         self.tag2vec()

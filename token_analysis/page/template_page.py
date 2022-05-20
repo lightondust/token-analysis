@@ -4,10 +4,11 @@ import pandas as pd
 
 
 class TemplatePage(BasePage):
+    title = 'Template Page'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Template Page'
-        st.title(self.title)
+        st.title(TemplatePage.title)
 
     def run(self):
         df = pd.DataFrame([f'<a target="_blank" href="https://coinmarketcap.com/ja/currencies/ethereum/">text</a>'])

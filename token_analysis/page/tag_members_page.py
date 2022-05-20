@@ -7,10 +7,11 @@ import pandas as pd
 
 
 class TagMembersPage(BasePage):
+    title = 'Tag Members'
+
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        self.title = 'Tag Members'
-        st.title(self.title)
+        st.title(TagMembersPage.title)
 
     def run(self):
         self.plot_tag_members()
