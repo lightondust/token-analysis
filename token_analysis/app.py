@@ -46,16 +46,8 @@ page_selected = st.sidebar.radio('page:', list(page_class.keys())+[''], index=le
 app_data = _get_app_data(page_class)
 app_url = AppURL()
 
-if page_selected:
-    app_url.set_query_params('page', page_selected)
-    page = page_selected
-else:
-    if app_url.page:
-        page = app_url.page
-    else:
-        page = 'Token marketcap'
+page = app_url.sync_variable('page', page_selected, 'Main page')
 
-# st.write(app_url.query_params)
 page_obj = page_class[page](app_data=app_data, app_url=app_url)
 page_obj.run()
 

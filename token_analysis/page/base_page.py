@@ -17,13 +17,7 @@ class BasePage(ABC):
     def token_select(self):
         tokens = list(self.app_data.token_tags.keys())
         token_select = st.selectbox('change token', [''] + tokens)
-        token = ''
-        if token_select:
-            token = token_select
-            self.app_url.set_query_params('token', token_select)
-        else:
-            if self.app_url.token:
-                token = self.app_url.token
+        token = self.app_url.sync_variable('token', token_select, '')
         st.markdown('#### selected token: {}'.format(token))
         return token
 
