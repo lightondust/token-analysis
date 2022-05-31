@@ -11,9 +11,9 @@ class TagGraphPage(BasePage):
 
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(TagGraphPage.title)
 
     def run(self):
+        st.title(TagGraphPage.title)
         self.tag_graph()
 
     def tag_graph(self):

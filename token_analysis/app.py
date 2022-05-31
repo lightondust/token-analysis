@@ -27,26 +27,26 @@ def _get_app_data(page_class):
     return get_app_data(page_class)
 
 
-
-page_class = {
-    'Main page': MainPage,
-    'Token marketcap': TokenMarketCapPage,
-    'Token similarity': TokenSimilarityPage,
-    'Token2vec': Token2VecPage,
-    'All2vec': All2VecPage,
-    'Tag members': TagMembersPage,
-    'Tag similarity': TagSimilarityPage,
-    'Tag2vec': Tag2VecPage,
-    'Tag statistics': TagStatisticsPage,
-    'Tag graph': TagGraphPage,
-    'Template_page': TemplatePage
-}
+page_class_list = [
+    MainPage,
+    TokenMarketCapPage,
+    TokenSimilarityPage,
+    Token2VecPage,
+    All2VecPage,
+    TagMembersPage,
+    TagSimilarityPage,
+    Tag2VecPage,
+    TagStatisticsPage,
+    TagGraphPage,
+    TemplatePage
+]
+page_class = {p.title: p for p in page_class_list}
 page_selected = st.sidebar.radio('page:', list(page_class.keys())+[''], index=len(page_class))
 
 app_data = _get_app_data(page_class)
 app_url = AppURL()
 
-page = app_url.sync_variable('page', page_selected, 'Main page')
+page = app_url.sync_variable('page', page_selected, MainPage.title)
 
 page_obj = page_class[page](app_data=app_data, app_url=app_url)
 page_obj.run()

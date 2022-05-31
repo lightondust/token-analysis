@@ -8,8 +8,8 @@ class TemplatePage(BasePage):
 
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(TemplatePage.title)
 
     def run(self):
+        st.title(TemplatePage.title)
         df = pd.DataFrame([f'<a target="_blank" href="https://coinmarketcap.com/ja/currencies/ethereum/">text</a>'])
         st.write(df.to_html(escape=False), unsafe_allow_html=True)

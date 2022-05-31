@@ -11,12 +11,12 @@ class Tag2VecPage(BasePage):
 
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(Tag2VecPage.title)
 
     def run(self):
         self.tag2vec()
 
     def tag2vec(self):
+        st.title(Tag2VecPage.title)
         tag_tokens = self.app_data.tag_tokens
         model = self.app_data.tag2vec_model
 

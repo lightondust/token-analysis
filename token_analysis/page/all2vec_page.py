@@ -11,10 +11,10 @@ class All2VecPage(BasePage):
 
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(All2VecPage.title)
         self.no_to_show = 100
 
     def run(self):
+        st.title(All2VecPage.title)
         tag_tokens = self.app_data.tag_tokens
         token_tags= self.app_data.token_tags
         model = self.app_data.all2vec_model

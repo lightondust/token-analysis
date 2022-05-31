@@ -11,9 +11,9 @@ class TagStatisticsPage(BasePage):
 
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(TagStatisticsPage.title)
 
     def run(self):
+        st.title(TagStatisticsPage.title)
         self.plot_tag_stats()
 
     def plot_tag_stats(self):

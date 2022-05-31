@@ -7,9 +7,9 @@ class TagSimilarityPage(BasePage):
 
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(TagSimilarityPage.title)
 
     def run(self):
+        st.title(TagSimilarityPage.title)
         self.tag_sim()
 
     def tag_sim(self):

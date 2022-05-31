@@ -11,9 +11,9 @@ class Token2VecPage(BasePage):
 
     def __init__(self, app_data: AppData, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(Token2VecPage.title)
 
     def run(self):
+        st.title(Token2VecPage.title)
         token_tags = self.app_data.token_tags
         model = self.app_data.token2vec_model
 

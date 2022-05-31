@@ -10,9 +10,9 @@ class TokenMarketCapPage(BasePage):
 
     def __init__(self, app_data, **kwargs):
         super().__init__(app_data, **kwargs)
-        st.title(TokenMarketCapPage.title)
 
     def run(self):
+        st.title(TokenMarketCapPage.title)
         self.plot_tokens()
 
     def plot_tokens(self):

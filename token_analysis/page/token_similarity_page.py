@@ -7,11 +7,11 @@ class TokenSimilarityPage(BasePage):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        st.title(TokenSimilarityPage.title)
         self.t_t_df = self.app_data.token_token_sim_df
         self.token_info = self.app_data.token_info
 
     def run(self):
+        st.title(TokenSimilarityPage.title)
         # token_src = st.selectbox('token:', self.token_list)
         token_src = self.token_select()
 
